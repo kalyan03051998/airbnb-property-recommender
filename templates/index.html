@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>ML Deployment</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+  <div class="login">
+    <h1>Property Recommender</h1>
+
+    <form action="{{ url_for('predict')}}" method="post">
+
+      <select name="neighbourhood" required="required">
+        <option value="" disabled selected hidden>Select The Neighbourhood</option>
+        {% for o in data.neighbourhood_group_cleansed.unique()|sort() %}
+        <option value="{{ o }}">{{ o }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="bedrooms" required="required">
+        <option value="" disabled selected hidden>Select Number of Bedrooms</option>
+        {% for o in data.bedrooms.unique()|sort() %}
+        <option value="{{ o|int }}">{{ o|int }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="bathrooms" required="required">
+        <option value="" disabled selected hidden>Select Number of Bathrooms</option>
+        {% for o in data.bathrooms.unique()|sort() %}
+        <option value="{{ o|int}}">{{ o|int }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="room_type" required="required">
+        <option value="" disabled selected hidden>Select Type of Room</option>
+        {% for o in data.room_type.unique()|sort() %}
+        <option value="{{ o}}">{{ o}}</option>
+        {% endfor %}
+      </select>
+
+      <input type="text" name="price" placeholder="Maximum Budget ($)" required="required" />
+
+      <input type="text" name="security_deposit" placeholder="Security Deposit Range upto($)" required="required" />
+
+
+      <select name="accommodates" required="required">
+        <option value="" disabled selected hidden>Number of Accomodates (Including Guests)</option>
+        {% for o in data.accommodates.unique()|sort() %}
+        <option value="{{ o|int}}">{{ o|int}}</option>
+        {% endfor %}
+
+      </select>
+
+      <select  name="host_label" required="required" >
+        <option value="" disabled selected hidden>Please Select the Host Type</option>
+        <option value="Label-0">"Inactive Hosts"</option>
+        <option value="Label-1">"Unverified but quick Hosts"</option>
+        <option value="Label-2">"Verified but Poor Hosts"</option>
+        <option value="Label-3">"Quick and verified but Poor Hosts"</option>
+        <option value="Label-4">"Best Hosts"</option>
+        <option value="Label-5">"Good and Verified but Turdy Hosts"</option>
+
+      </select>
+
+      
+      <select multiple id="mymultiselect" name="mymultiselect">
+        <option value="" disabled selected hidden>Please Select the amenities that you prefer (Including Guests)</option>
+        {% for o in amenity|sort() %}
+        <option value="{{o}}">{{o}}</option>
+        {% endfor %}
+
+      </select>
+
+
+      <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+    </div>
+
+    <br>
+</body>
+
+</html>

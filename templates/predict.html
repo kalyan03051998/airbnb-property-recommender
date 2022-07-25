@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+
+    .column {
+        float: left;
+        width: 50%;
+        padding: 10px;
+        height: 300px;
+        align-items: center;
+    }
+
+    .column li {
+
+        text-align: justify;
+        padding-left: 2rem;
+    }
+
+    .column img {
+        align-items: center;
+        padding-top: 1rem;
+        padding-bottom: 3rem;
+        padding-left: 1rem;
+        padding-right: 2rem;
+    }
+
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .row h3 {
+        color: blanchedalmond;
+    }
+
+ 
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>ML Deployment</title>
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+    <section>
+
+        <div class="login table-responsive">
+            <h1>Property Recommender</h1>
+
+            <form action="{{ url_for('predict')}}" method="post">
+
+                <select name="neighbourhood" required="required">
+                    <option value="" disabled selected hidden>Select The Neighbourhood</option>
+                    {% for o in data.neighbourhood_group_cleansed.unique()|sort() %}
+                    <option value="{{ o }}">{{ o }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="bedrooms" required="required">
+                    <option value="" disabled selected hidden>Select Number of Bedrooms</option>
+                    {% for o in data.bedrooms.unique()|sort() %}
+                    <option value="{{ o|int }}">{{ o|int }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="bathrooms" required="required">
+                    <option value="" disabled selected hidden>Select Number of Bathrooms</option>
+                    {% for o in data.bathrooms.unique()|sort() %}
+                    <option value="{{ o|int}}">{{ o|int }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="room_type" required="required">
+                    <option value="" disabled selected hidden>Select Type of Room</option>
+                    {% for o in data.room_type.unique()|sort() %}
+                    <option value="{{ o}}">{{ o}}</option>
+                    {% endfor %}
+                </select>
+
+                <input type="text" name="price" placeholder="Maximum Budget ($)" required="required" />
+
+                <input type="text" name="security_deposit" placeholder="Security Deposit Range upto($)"
+                    required="required" />
+
+
+                <select name="accommodates" required="required">
+                    <option value="" disabled selected hidden>Number of Accomodates (Including Guests)</option>
+                    {% for o in data.accommodates.unique()|sort() %}
+                    <option value="{{ o|int}}">{{ o|int}}</option>
+                    {% endfor %}
+
+                </select>
+
+                <select name="host_label" required="required">
+                    <option value="" disabled selected hidden>Please Select the Host Type</option>
+                    <option value="Label-0">"Inactive Hosts"</option>
+                    <option value="Label-1">"Unverified but quick Hosts"</option>
+                    <option value="Label-2">"Verified but Poor Hosts"</option>
+                    <option value="Label-3">"Quick and verified but Poor Hosts"</option>
+                    <option value="Label-4">"Best Hosts"</option>
+                    <option value="Label-5">"Good and Verified but Turdy Hosts"</option>
+
+                </select>
+
+
+                <select multiple id="mymultiselect" name="mymultiselect">
+                    <option value="" disabled selected hidden>Please Select the amenities that you prefer (Including
+                        Guests)
+                    </option>
+                    {% for o in amenity|sort() %}
+                    <option value="{{o}}">{{o}}</option>
+                    {% endfor %}
+
+                </select>
+
+
+                <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+            </form>
+
+            <br>
+
+            <h2>Your Requirement matches with {{val}} Type of Properties</h2>
+
+            <h2><u> Recommended Properties </u></h2>
+
+            <br><br>
+
+            <div class="row">
+                {% for i in range (new|length) %}
+                <h3><u> Property : {{i+1}} </u></h3>
+                <div class="column">
+                    <img src="{{new.iloc[i,15]}}" width=500px height=300px alt="">
+                    <br><br><br>
+                </div>
+                <div class="column">
+                    <br>
+                    <br>
+                    <li><b>Property ID: </b> {{new.loc[i,"id"]}}</li>
+                    <li><b>Property Name: </b> {{new.loc[i,"name"]}}</li>
+                    <li><b>Property Adress: </b> {{new.loc[i,"street"]}}</li>
+                    <li><b>Review Score: </b> {{new.loc[i,"review_scores_rating"]}} % </li>
+                    <li><b>Accomodation URL: </b> <a href="{{new.iloc[i,3]}}">Click Here</a></li>
+                </div>
+              
+                <!-- <span><b><br> Description:</b> {{new.loc[i,"description"]}}<br></span> -->
+                    {% endfor %}
+
+            </div>
+
+        </div>
+
+</body>
+</section>
+
+</html>
