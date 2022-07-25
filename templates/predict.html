@@ -26,6 +26,10 @@
         padding-bottom: 3rem;
         padding-left: 1rem;
         padding-right: 2rem;
+        max-width:  70%;
+        width: 500px;
+        height: 300px;
+        max-height: 90%;
     }
 
 
@@ -141,7 +145,7 @@
                 {% for i in range (new|length) %}
                 <h3><u> Property : {{i+1}} </u></h3>
                 <div class="column">
-                    <img src="{{new.iloc[i,15]}}" width=500px height=300px alt="">
+                    <img src="{{new.iloc[i,15]}}"  alt="">
                     <br><br><br>
                 </div>
                 <div class="column">
