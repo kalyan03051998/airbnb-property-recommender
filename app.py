@@ -1,5 +1,3 @@
-import re
-from tkinter import ON
 from flask import Flask,render_template,request,redirect
 import pandas as pd
 import plotly
